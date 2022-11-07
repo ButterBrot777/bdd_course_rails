@@ -1,0 +1,8 @@
+# add frozen string literal automatically
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  SafeAutoCorrect: true
+
+# disable comment before class
+Documentation:
+  Enabled: false

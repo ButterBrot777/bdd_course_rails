@@ -52,6 +52,7 @@ group :development do
   # Pretifier
   gem 'solargraph', group: :development
   gem 'rubocop', group: :development
+  gem 'pry', '~> 0.12.2'
 
   gem 'guard', '~> 2.14.0'
   gem 'guard-rspec', '~> 4.7.2'

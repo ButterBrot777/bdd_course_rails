@@ -15,6 +15,10 @@ class ArticlesController < ApplicationController
     @article = Article.find(params[:id])
   end
 
+  def edit
+    @article = Article.find(params[:id])
+  end
+
   def create
     @article = Article.new(article_params)
     if @article.save
@@ -24,6 +28,25 @@ class ArticlesController < ApplicationController
       flash.now[:danger] = 'Article has not been created'
       render :new
     end
+  end
+
+  def update
+    @article = Article.find(params[:id])
+    if @article.update(article_params)
+      flash[:success] = 'Article has been updated'
+      redirect_to @article
+    else
+      flash.now[:danger] = 'Article has not been updated'
+      render :edit
+    end
+  end
+
+  def destroy
+    @article = Article.find(params[:id])
+    return unless @article.destroy
+
+    flash[:success] = 'Article has been deleted.'
+    redirect_to articles_path
   end
 
   protected

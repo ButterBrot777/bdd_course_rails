@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
@@ -31,16 +33,16 @@ cucumber_options = {
   # notification: false
 }
 
-guard "cucumber", cucumber_options do
+guard 'cucumber', cucumber_options do
   watch(%r{^features/.+\.feature$})
-  watch(%r{^features/support/.+$}) { "features" }
+  watch(%r{^features/support/.+$}) { 'features' }
 
   watch(%r{^features/step_definitions/(.+)_steps\.rb$}) do |m|
-    Dir[File.join("**/#{m[1]}.feature")][0] || "features"
+    Dir[File.join("**/#{m[1]}.feature")][0] || 'features'
   end
 end
 
-# Note: The cmd option is now required due to the increasing number of ways
+# NOTE: The cmd option is now required due to the increasing number of ways
 #       rspec may be run, below are examples of the most common uses.
 #  * bundler: 'bundle exec rspec'
 #  * bundler binstubs: 'bin/rspec'
@@ -49,8 +51,8 @@ end
 #  * zeus: 'zeus rspec' (requires the server to be started separately)
 #  * 'just' rspec: 'rspec'
 
-guard :rspec, cmd: "rspec" do
-  require "guard/rspec/dsl"
+guard :rspec, cmd: 'rspec' do
+  require 'guard/rspec/dsl'
   dsl = Guard::RSpec::Dsl.new(self)
 
   # Feel free to open issues for suggestions and improvements
@@ -66,12 +68,12 @@ guard :rspec, cmd: "rspec" do
   dsl.watch_spec_files_for(ruby.lib_files)
 
   # Rails files
-  rails = dsl.rails(view_extensions: %w(erb haml slim))
+  rails = dsl.rails(view_extensions: %w[erb haml slim])
   dsl.watch_spec_files_for(rails.app_files)
   dsl.watch_spec_files_for(rails.views)
 
-  watch(%r{^app/controllers/(.+)_(controller)\.rb$})  { "spec/features" }
-  watch(%r{^app/models/(.+)\.rb$})  { "spec/features" }
+  watch(%r{^app/controllers/(.+)_(controller)\.rb$}) { 'spec/features' }
+  watch(%r{^app/models/(.+)\.rb$}) { 'spec/features' }
   watch(rails.controllers) do |m|
     [
       rspec.spec.call("routing/#{m[1]}_routing"),
@@ -82,16 +84,16 @@ guard :rspec, cmd: "rspec" do
 
   # Rails config changes
   watch(rails.spec_helper)     { rspec.spec_dir }
-  watch(rails.routes)          { "spec" } # { "#{rspec.spec_dir}/routing" }
+  watch(rails.routes)          { 'spec' } # { "#{rspec.spec_dir}/routing" }
   watch(rails.app_controller)  { "#{rspec.spec_dir}/controllers" }
 
   # Capybara features specs
-  watch(rails.view_dirs)     { "spec/features" } # { |m| rspec.spec.call("features/#{m[1]}") }
+  watch(rails.view_dirs)     { 'spec/features' } # { |m| rspec.spec.call("features/#{m[1]}") }
   watch(rails.layouts)       { |m| rspec.spec.call("features/#{m[1]}") }
 
   # Turnip features and steps
   watch(%r{^spec/acceptance/(.+)\.feature$})
   watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$}) do |m|
-    Dir[File.join("**/#{m[1]}.feature")][0] || "spec/acceptance"
+    Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance'
   end
 end

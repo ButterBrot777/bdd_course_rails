@@ -1,7 +1,7 @@
-<%= render './articles/errors' %>
 <div class="row">
   <div class="col-md-12">
     <%= form_for(@article, :html=> {class: "form-horizontal", role: "form"}) do |f| %>
+      <%= render './articles/errors' %>
       <div class="form-group">
         <div class="control-label col-md-1">
           <%= f.label :title %>

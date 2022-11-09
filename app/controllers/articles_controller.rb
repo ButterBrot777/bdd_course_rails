@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ArticlesController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, with: :resource_not_found
+
   def index
     @articles = Article.all
   end
@@ -22,6 +24,13 @@ class ArticlesController < ApplicationController
       flash.now[:danger] = 'Article has not been created'
       render :new
     end
+  end
+
+  protected
+
+  def resource_not_found
+    flash[:alert] = 'The article you are looking for could not be found'
+    redirect_to root_path
   end
 
   private

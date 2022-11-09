@@ -1,11 +1,15 @@
 <%= link_to 'New Article' , new_article_path %>
-<% @articles.each do |article| %>
-  <div class="well well-lg">
-    <div class="article-title">
-      <%= link_to article.title, article_path(article), class: "active" %>
+<% if @articles.empty? %>
+  <h1 id="no-articles">No Articles Created</h1>
+<% else %>
+  <% @articles.each do |article| %>
+    <div class="well well-lg">
+      <div class="article-title">
+        <%= link_to article.title, article_path(article), class: "active" %>
+      </div>
+      <div class="article-body">
+        <%= truncate(article.body, length: 500) %>
+      </div>
     </div>
-    <div class="article-body">
-      <%= truncate(article.body, length: 500) %>
-    </div>
-  </div>
+  <% end %>
 <% end %>

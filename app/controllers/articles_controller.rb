@@ -2,7 +2,7 @@
 
 class ArticlesController < ApplicationController
   before_action :set_article, only: %i[show edit update destroy]
-  # before_action :authenticate_user!, except: [:index, :show]
+  # before_action :authenticate_user!, except: %i[index show]
 
   rescue_from ActiveRecord::RecordNotFound, with: :resource_not_found
 
@@ -20,6 +20,7 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params)
+    @article.user = current_user
     if @article.save
       flash[:success] = 'Article has been created'
       redirect_to articles_path

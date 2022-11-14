@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.feature 'User sign in' do
-  before_action do
+  before do
     @john = User.create!(email: 'john@example.com', password: 'password')
   end
 

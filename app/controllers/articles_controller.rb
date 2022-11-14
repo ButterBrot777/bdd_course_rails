@@ -12,9 +12,13 @@ class ArticlesController < ApplicationController
 
   def new
     @article = Article.new
+    @comment = @article.comments.build
   end
 
-  def show; end
+  def show
+    @comment = @article.comments.build
+    @comments = @article.comments
+  end
 
   def edit
     return if @article.user == current_user

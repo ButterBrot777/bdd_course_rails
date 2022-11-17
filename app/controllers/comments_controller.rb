@@ -3,18 +3,6 @@
 class CommentsController < ApplicationController
   before_action :set_article, only: %i[show edit create update destroy]
 
-  def index
-    @comments = Comment.all
-  end
-
-  def new; end
-
-  def show
-    @comments = @article.comments
-  end
-
-  def edit; end
-
   # rubocop:disable Metrics
   def create
     if !current_user
@@ -25,10 +13,11 @@ class CommentsController < ApplicationController
       @comment.user = current_user
       if @comment.save
         flash[:success] = 'Comment has been created'
+        ActionCable.server.broadcast 'comments', render(partial: 'comments/comment', object: @comment)
       else
         flash.now[:alert] = 'Comment has not been created'
+        redirect_to article_path(@article)
       end
-      redirect_to article_path(@article)
     end
   end
   # rubocop:enable Metrics

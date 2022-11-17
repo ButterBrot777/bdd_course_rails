@@ -7,12 +7,11 @@ class ArticlesController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :resource_not_found
 
   def index
-    @articles = Article.all
+    @articles = Article.order(:asc)
   end
 
   def new
     @article = Article.new
-    @comment = @article.comments.build
   end
 
   def show
@@ -21,10 +20,12 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    return if @article.user == current_user
-
-    flash[:alert] = 'You can only edit your own article.'
-    redirect_to root_path
+    # rubocop:disable Style/GuardClause
+    unless @article.user == current_user
+      flash[:alert] = 'You can only edit your own article.'
+      redirect_to root_path
+    end
+    # rubocop:enable Style/GuardClause
   end
 
   def create
@@ -39,24 +40,33 @@ class ArticlesController < ApplicationController
     end
   end
 
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Style/IfInsideElse
   def update
     if @article.user != current_user
       flash[:danger] = 'You can only edit your own article.'
       redirect_to root_path
-    elsif @article.update(article_params)
-      flash[:success] = 'Article has been updated'
-      redirect_to @article
     else
-      flash.now[:danger] = 'Article has not been updated'
-      render :edit
+
+      if @article.update(article_params)
+        flash[:success] = 'Article has been updated'
+        redirect_to @article
+      else
+        flash.now[:danger] = 'Article has not been updated'
+        render :edit
+      end
     end
   end
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Style/IfInsideElse
 
   def destroy
-    return unless @article.destroy
-
-    flash[:success] = 'Article has been deleted.'
-    redirect_to articles_path
+    # rubocop:disable Style/GuardClause
+    if @article.destroy
+      flash[:success] = 'Article has been deleted.'
+      redirect_to articles_path
+      # rubocop:enable Style/GuardClause
+    end
   end
 
   protected
